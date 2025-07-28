@@ -1,6 +1,6 @@
 import requests
 
-from messages import Message
+from message import Message
 
 
 # MODEL RELATED CODE 
@@ -29,12 +29,18 @@ class Model:
             last_message = Message(response.json())
         self.messages.append(last_message)
 
-        if (last_message.has_tool_call()):
+        if (last_message.has_tool_call()): # Maybe some BUG here, the tool is called even when not needed
             for tool_call in last_message.tool_calls:
                 tool = self.get_tool_by_name(tool_call.name)
                 response = Message.as_tool(tool.run(**tool_call.arguments), tool)
                 self.messages.append(response)
                 self.request_assistant_message()
+
+    def add_tool(self, tool):
+        self.tools.append(tool)
+
+    def add_message(self, message):
+        self.messages.append(message)
 
     def get_tool_by_name(self, tool_name):
         for tool in self.tools:
@@ -59,16 +65,14 @@ if (__name__ == "__main__"):
 
     model = Model(model_name="llama3.1:8b")
     # model = Model(model_name="qwen3:1.7b")
-    # model = Model(model_name="qwen3:8b")
+    # model = Model(model_name="qwen3:4b")
 
     from basic_tools import CalculatorTool
-    model.tools.append(CalculatorTool())
+    model.add_tool(CalculatorTool())
 
-
-    model.messages.append(Message.as_system("You are a helpful assistant"))
-    model.messages.append(Message.as_user("I have 111 coins, I invested them and received 1.6 times the amount back. How many coins I have now?"))
-    model.request_assistant_message()
-
+    model.add_message(Message.as_system("You are a helpful assistant. Your job is to answer the user. You have some tools on your disposal but you should use them for their intended porpose, also do not call them if not needed. Just responding in text to the user is a valid answer."))
+    # model.add_message(Message.as_user("I have 111 coins, I invested them and received 1.6 times the amount back. How many coins I have now?"))
+    # model.request_assistant_message()
 
     model.chat()
 
