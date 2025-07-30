@@ -78,6 +78,9 @@ class Message:
     def has_tool_call(self):
         return "tool_calls" in self.raw_message
 
+    def is_system_prompt(self):
+        return self.role == Role.SYSTEM
+
     def __repr__(self):
         role = self.role.value
         msg = self.full_message[:40].replace("\n", "<new_line>")
@@ -91,11 +94,3 @@ class Message:
             print(f'{self.role.name}:\n\t{self.full_message}\n\tTools called:{[self.tool_calls]}')
         else:
             print(f'{self.role.name}:\n\t{self.full_message}\n')
-
-
-# class MessageHistory:
-#     def __init__(self):
-#         self.messages = []
-#
-#     def 
-
