@@ -1,11 +1,18 @@
-from actor import Actor
-from model import Model
-from message import Message
-from history import History
-from basic_tools import CalculatorTool
+from logging import getLogger, INFO
+getLogger("").setLevel(INFO)
 
-model = Model(model_name="llama3.1:8b")
-# model = Model(model_name="qwen3:1.7b")
+from src.actor import Actor
+from src.model import Model
+from src.message import Message
+from src.history import History
+from src.basic_tools import CalculatorTool
+
+
+
+
+
+# model = Model(model_name="llama3.1:8b")
+model = Model(model_name="qwen3:1.7b")
 # model = Model(model_name="qwen3:4b")
 
 calc = CalculatorTool()

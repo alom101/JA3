@@ -1,5 +1,5 @@
-from history import History
-from message import Message
+from src.history import History
+from src.message import Message
 
 
 class Actor:
@@ -42,8 +42,3 @@ class Actor:
                 self.request_assistant_message()
             except KeyboardInterrupt:
                 return
-
-
-
-
-

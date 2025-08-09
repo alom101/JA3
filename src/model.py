@@ -1,5 +1,5 @@
 import requests
-from message import Message
+from src.message import Message
 
 class Model:
     def __init__(self,
@@ -10,7 +10,6 @@ class Model:
         self.api = ollama_api
 
     def __call__(self, messages, tools):
-        __import__('pprint').pprint(messages)
         payload = {
             "model": self.model,
             "messages": [msg.encode() for msg in messages],
@@ -21,5 +20,3 @@ class Model:
         with requests.post(self.api, json=payload) as response:
             response.raise_for_status()
         return Message(response.json())
-
-
