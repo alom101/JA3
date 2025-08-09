@@ -1,5 +1,9 @@
 import requests
 from src.message import Message
+from logging import getLogger
+
+logger = getLogger("JA3")
+
 
 class Model:
     def __init__(self,
@@ -17,6 +21,9 @@ class Model:
             "stream": False
         }
 
-        with requests.post(self.api, json=payload) as response:
-            response.raise_for_status()
-        return Message(response.json())
+        try:
+            with requests.post(self.api, json=payload) as response:
+                response.raise_for_status()
+            return Message(response.json())
+        except Exception as e:
+            logger.error(f"Failed to request model response: {e}")
